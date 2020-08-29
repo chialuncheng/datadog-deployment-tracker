@@ -1,0 +1,21 @@
+name: Datadog Deployment Tracker
+description: Send a deployment complete custome metric to datadog for deployment count purposes
+author: https://github.com/chialuncheng
+configuration:
+  properties:
+    name:
+      type: string
+    release:
+      type: string
+    environment:
+      type: string
+    service:
+      type: string
+    ddkey:
+      type: string
+  required:
+    - name
+    - release
+    - environment
+    - service
+    - ddkey

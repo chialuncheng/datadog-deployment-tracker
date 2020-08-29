@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+NAME=${BUILDKITE_PLUGIN_DATADOG_DEPLOYMENT_TRACKER_NAME}
+RELEASE=${BUILDKITE_PLUGIN_DATADOG_DEPLOYMENT_TRACKER_RELEASE}
+ENVIRONMENT=${BUILDKITE_PLUGIN_DATADOG_DEPLOYMENT_TRACKER_ENVIRONMENT}
+SERVICE=${BUILDKITE_PLUGIN_DATADOG_DEPLOYMENT_TRACKER_SERVICE}
+DATADOG_API_KEY=${BUILDKITE_PLUGIN_DATADOG_DEPLOYMENT_TRACKER_DDKEY}
+export NOW="$(date +%s)"
+
+# Curl command
+curl -X POST https://api.datadoghq.com/api/v1/series?api_key=${DATADOG_API_KEY} \
+-H "Content-Type: application/json" \
+-d @- << EOF
+{
+  "series": [
+    {
+      "metric": "${name}.deployment.count",
+      "points": [
+        [
+          "${NOW}",
+          "1"
+        ]
+      ],
+      "tags": [
+        "environment:${ENVIRONMENT}",
+        "service:${SERVICE}",
+        "release:${RELEASE}"
+      ]
+    }
+  ]
+}
+EOF
+
+echo "👌 Done!"
